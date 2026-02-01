@@ -38,11 +38,23 @@ This means that when you type `groq` in your terminal, your system will find the
 
 ## Usage
 
-Before using the CLI, make sure you have your Groq API key set as an environment variable:
+Before using the CLI, make sure you have your Groq API key set as an environment variable. The method for setting environment variables depends on your operating system and shell.
 
+### Environment Setup
+
+**For Linux/macOS (Bash/Zsh):**
 ```bash
-export GROQ_API_KEY="your_key"
+export GROQ_API_KEY="your_api_key_here"
 ```
+*(Note: For persistent storage, add this line to your shell's profile file, e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`.)*
+
+**For Windows PowerShell:**
+```powershell
+$env:GROQ_API_KEY="your_api_key_here"
+```
+*(Note: This command sets the variable for the current session only. To make it permanent, add this line to your PowerShell profile script by running `notepad $PROFILE` and saving the file.)*
+
+**Important:** Replace `"your_api_key_here"` with your actual Groq API key.
 
 Then, you can use the `groq` command as follows:
 
