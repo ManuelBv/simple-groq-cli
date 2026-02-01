@@ -1,6 +1,6 @@
 # Simple Groq CLI
 
-A simple command-line interface for the Groq API, now powered by TypeScript.
+A simple command-line interface for the Groq API.
 
 ## Installation
 
@@ -10,19 +10,23 @@ To make the `groq` command work from any folder, you need to globally link this 
     If you are moving this project to a new machine, you will need to clone it first.
 
 2.  **Navigate to the project directory:**
+
     ```bash
     cd simple-groq-cli
     ```
 
 3.  **Install dependencies:**
+
     ```bash
     npm install
     ```
 
 4.  **Build the TypeScript code:**
+
     ```bash
     npm run build
     ```
+
     This command compiles the TypeScript files (`.ts`) into JavaScript files (`.js`) in the `dist` directory.
 
 5.  **Link the package globally:**
@@ -43,31 +47,37 @@ Before using the CLI, make sure you have your Groq API key set as an environment
 ### Environment Setup
 
 **For Linux/macOS (Bash/Zsh):**
+
 ```bash
 export GROQ_API_KEY="your_api_key_here"
 ```
-*(Note: For persistent storage, add this line to your shell's profile file, e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`.)*
+
+_(Note: For persistent storage, add this line to your shell's profile file, e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`.)_
 
 **For Windows PowerShell:**
+
 ```powershell
 $env:GROQ_API_KEY="your_api_key_here"
 ```
-*(Note: This command sets the variable for the current session only. To make it permanent, add this line to your PowerShell profile script by running `notepad $PROFILE` and saving the file.)*
+
+_(Note: This command sets the variable for the current session only. To make it permanent, add this line to your PowerShell profile script by running `notepad $PROFILE` and saving the file.)_
 
 **Important:** Replace `"your_api_key_here"` with your actual Groq API key.
 
 Then, you can use the `groq` command as follows:
 
-*   **To run a prompt:**
-    ```bash
-    groq <preset|model> "Your prompt"
-    ```
-    For example: `groq fast "Write a short poem about AI."`
+- **To run a prompt:**
 
-*   **To list available model presets:**
-    ```bash
-    groq --list
-    ```
+  ```bash
+  groq <preset|model> "Your prompt"
+  ```
+
+  For example: `groq fast "Write a short poem about AI."`
+
+- **To list available model presets:**
+  ```bash
+  groq --list
+  ```
 
 ### Running from source (development)
 
@@ -87,11 +97,11 @@ npm test
 
 ### Presets
 
-| Preset  | Model                       |
-| ------- | --------------------------- |
-| `text`    | `llama-3.3-70b-versatile`   |
-| `fast`    | `llama-3.1-8b-instant`      |
-| `heavy`   | `llama3-70b-8192`           |
-| `code`    | `llama-3.3-70b-versatile`   |
-| `mixtral` | `mixtral-8x7b-32768`        |
-| `gemma`   | `gemma-7b-it`               |
+| Preset    | Model                     |
+| --------- | ------------------------- |
+| `text`    | `llama-3.3-70b-versatile` |
+| `fast`    | `llama-3.1-8b-instant`    |
+| `heavy`   | `llama3-70b-8192`         |
+| `code`    | `llama-3.3-70b-versatile` |
+| `mixtral` | `mixtral-8x7b-32768`      |
+| `gemma`   | `gemma-7b-it`             |
