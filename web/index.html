@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Groq Chat</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="api-key-modal" class="modal">
+        <div class="modal-content">
+            <h2>Enter Groq API Key</h2>
+            <p>Your API key is stored locally in your browser (localStorage). Do not use on public computers.</p>
+            <input type="password" id="api-key-input" placeholder="gsk_..." style="width: 100%; padding: 10px; margin: 10px 0;">
+            <button id="save-api-key-btn">Save Key</button>
+            <p class="error-msg" id="api-key-error" style="display: none; color: red;">Please enter a valid key.</p>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>History</h3>
+                <button id="new-chat-btn">+</button>
+            </div>
+            <div id="chat-history-list" class="history-list">
+                <!-- History items will go here -->
+            </div>
+            <div class="sidebar-footer">
+                <button id="clear-key-btn" class="small-btn">Clear API Key</button>
+            </div>
+        </aside>
+
+        <main class="chat-area">
+            <header class="chat-header">
+                <h2 id="current-chat-title">New Chat</h2>
+                <button id="download-chat-btn" title="Download as Markdown">⬇️</button>
+            </header>
+            
+            <div id="messages-container" class="messages-container">
+                <div class="message system">
+                    <div class="message-content">
+                        Welcome! Enter your Groq API key to start chatting.
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <textarea id="message-input" placeholder="Type your message..." rows="1"></textarea>
+                <button id="send-btn">Send</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="./app.ts"></script>
+</body>
+</html>

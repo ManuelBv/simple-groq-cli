@@ -1,0 +1,11 @@
+
+> simple-groq-cli@1.0.0 dev:web
+> vite
+
+
+  VITE v7.3.1  ready in 323 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: http://10.190.58.72:5173/
+  ➜  Network: http://10.89.208.200:5173/
+  ➜  Network: http://10.154.91.38:5173/

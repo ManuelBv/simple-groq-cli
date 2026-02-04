@@ -8,6 +8,9 @@
   },
   "scripts": {
     "build": "tsc",
+    "dev:web": "vite",
+    "build:web": "vite build",
+    "build:web:legacy": "mkdir -p docs && cp web/index.html web/style.css docs/ && esbuild web/app.ts --bundle --outfile=docs/bundle.js --format=esm --target=es2020",
     "test": "jest --config jest.config.ts"
   },
   "keywords": [
@@ -18,14 +21,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "groq-sdk": "^0.37.0"
+    "dompurify": "^3.3.1",
+    "groq-sdk": "^0.37.0",
+    "marked": "^17.0.1"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/jest": "^30.0.0",
+    "@types/marked": "^5.0.2",
     "@types/node": "^25.1.0",
+    "esbuild": "^0.27.2",
     "jest": "^30.2.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1"
   }
 }
