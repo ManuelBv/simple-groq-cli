@@ -266,3 +266,63 @@ body {
     background: #bdc3c7;
     cursor: not-allowed;
 }
+
+/* Debug Log */
+.debug-log {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+}
+
+.debug-log pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: #c0392b;
+    background: #fff;
+    padding: 10px;
+    border: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.debug-log button {
+    padding: 5px 10px;
+    background: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 200px; /* Limit height of history on mobile */
+        flex-shrink: 0;
+    }
+
+    .history-list {
+        display: none; /* Hide history by default on mobile to save space, maybe toggle later */
+    }
+    
+    /* Show history only when needed - simpler for now just to make it usable */
+    .sidebar-header h3 {
+        font-size: 1rem;
+    }
+
+    .chat-area {
+        height: 100%; /* Fill remaining height */
+    }
+
+    .message {
+        max-width: 90%;
+    }
+}

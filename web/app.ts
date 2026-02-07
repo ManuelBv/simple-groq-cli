@@ -41,6 +41,35 @@ const sendBtn = document.getElementById('send-btn') as HTMLButtonElement;
 const currentChatTitle = document.getElementById('current-chat-title') as HTMLHeadingElement;
 const downloadBtn = document.getElementById('download-chat-btn') as HTMLButtonElement;
 
+// --- Debug Elements ---
+const debugLog = document.getElementById('debug-log') as HTMLDivElement;
+const debugContent = document.getElementById('debug-content') as HTMLPreElement;
+const clearDebugBtn = document.getElementById('clear-debug-btn') as HTMLButtonElement;
+
+// --- Debug Logic ---
+function logError(error: any, context: string = '') {
+    debugLog.style.display = 'block';
+    const timestamp = new Date().toISOString();
+    let message = `[${timestamp}] Error ${context ? `in ${context}` : ''}:\n`;
+    
+    if (error instanceof Error) {
+        message += `${error.name}: ${error.message}\n`;
+        if (error.stack) {
+            message += `Stack:\n${error.stack}\n`;
+        }
+    } else {
+        message += JSON.stringify(error, null, 2);
+    }
+    
+    debugContent.textContent += message + '\n-------------------\n';
+    debugLog.scrollTop = debugLog.scrollHeight;
+}
+
+clearDebugBtn.onclick = () => {
+    debugContent.textContent = '';
+    debugLog.style.display = 'none';
+};
+
 // --- Database Init ---
 function initDB(): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -256,7 +285,8 @@ sendBtn.onclick = async () => {
         const response = await callGroqAPI(updatedMessages);
         
         if (!response.ok) {
-            throw new Error(`API Error: ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`API Error: ${response.status} ${response.statusText}\nDetails: ${errorText}`);
         }
 
         const reader = response.body?.getReader();
@@ -283,6 +313,7 @@ sendBtn.onclick = async () => {
                             messagesContainer.scrollTop = messagesContainer.scrollHeight;
                         } catch (e) {
                             console.error('Error parsing chunk', e);
+                            logError(e, 'Parsing Chunk');
                         }
                     }
                 }
@@ -295,7 +326,9 @@ sendBtn.onclick = async () => {
         await updateChat(currentChatId, updatedMessages);
 
     } catch (error) {
-        contentDiv.innerHTML = `<span style="color:red">Error: ${error}</span>`;
+        console.error(error);
+        logError(error, 'API Call');
+        contentDiv.innerHTML = `<span style="color:red">Error. See debug log below.</span>`;
     }
 };
 
