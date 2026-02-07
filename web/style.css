@@ -319,7 +319,8 @@ body {
     }
 
     .chat-area {
-        height: 100%; /* Fill remaining height */
+        flex: 1; /* Fill remaining height */
+        overflow: hidden; /* Ensure internal scrolling works */
     }
 
     .message {
