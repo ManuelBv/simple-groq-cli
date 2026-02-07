@@ -51,7 +51,18 @@ const copyDebugBtn = document.getElementById('copy-debug-btn') as HTMLButtonElem
 function logError(error: any, context: string = '') {
     debugLog.style.display = 'block';
     const timestamp = new Date().toISOString();
-    let message = `[${timestamp}] Error ${context ? `in ${context}` : ''}:\n`;
+    
+    // Create masked key for debugging
+    let maskedKey = 'None';
+    if (apiKey) {
+        if (apiKey.length > 10) {
+            maskedKey = `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`;
+        } else {
+            maskedKey = '*** (Too short)';
+        }
+    }
+
+    let message = `[${timestamp}] Key: ${maskedKey}\nError ${context ? `in ${context}` : ''}:\n`;
     
     if (error instanceof Error) {
         message += `${error.name}: ${error.message}\n`;
