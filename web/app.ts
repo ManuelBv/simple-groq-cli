@@ -24,7 +24,7 @@ const MODEL = 'llama-3.3-70b-versatile'; // Default model
 // --- State ---
 let db: IDBDatabase;
 let currentChatId: string | null = null;
-let apiKey: string | null = localStorage.getItem('groq_api_key');
+let apiKey: string | null = localStorage.getItem('groq_api_key') ? localStorage.getItem('groq_api_key')!.trim() : null;
 
 // --- DOM Elements ---
 const modal = document.getElementById('api-key-modal') as HTMLDivElement;
@@ -45,6 +45,7 @@ const downloadBtn = document.getElementById('download-chat-btn') as HTMLButtonEl
 const debugLog = document.getElementById('debug-log') as HTMLDivElement;
 const debugContent = document.getElementById('debug-content') as HTMLPreElement;
 const clearDebugBtn = document.getElementById('clear-debug-btn') as HTMLButtonElement;
+const copyDebugBtn = document.getElementById('copy-debug-btn') as HTMLButtonElement;
 
 // --- Debug Logic ---
 function logError(error: any, context: string = '') {
@@ -68,6 +69,18 @@ function logError(error: any, context: string = '') {
 clearDebugBtn.onclick = () => {
     debugContent.textContent = '';
     debugLog.style.display = 'none';
+};
+
+copyDebugBtn.onclick = async () => {
+    try {
+        await navigator.clipboard.writeText(debugContent.textContent || '');
+        const originalText = copyDebugBtn.textContent;
+        copyDebugBtn.textContent = 'Copied!';
+        setTimeout(() => copyDebugBtn.textContent = originalText, 2000);
+    } catch (err) {
+        console.error('Failed to copy', err);
+        alert('Failed to copy to clipboard');
+    }
 };
 
 // --- Database Init ---
