@@ -242,17 +242,20 @@ async function updateChat(id: string, messages: Message[], title?: string) {
 async function callGroqAPI(messages: Message[]): Promise<Response> {
     if (!apiKey) throw new Error("No API Key");
 
+    const payload = {
+        messages: messages,
+        model: modelSelect.value,
+        stream: true
+    };
+
     return fetch(API_URL, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
-        body: JSON.stringify({
-            messages: messages,
-            model: modelSelect.value,
-            stream: true // Enable streaming
-        })
+        body: JSON.stringify(payload)
     });
 }
 
@@ -311,7 +314,15 @@ sendBtn.onclick = async () => {
         
         if (!response.ok) {
             const errorText = await response.text();
-            throw new Error(`API Error: ${response.status} ${response.statusText}\nDetails: ${errorText}`);
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch(e) {
+                errorData = errorText;
+            }
+            console.error('API Error Response:', errorData);
+            logError(errorData, `API Call (Status: ${response.status})`);
+            throw new Error(`API Error: ${response.status} ${response.statusText}`);
         }
 
         const reader = response.body?.getReader();
