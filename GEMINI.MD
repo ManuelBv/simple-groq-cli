@@ -189,4 +189,12 @@ Create session archive when user says:
 - **Security**: Highlight any security considerations or patterns
 - **Completeness Check**: Verify every action in conversation is documented
 
+## Current Progress
+
+### Completed Tasks
+- [x] Create Web UI with "Bring Your Own Key" (BYIK) support.
+- [x] Implement local storage for API keys and chat history (IndexedDB).
+- [x] Deploy Web UI to GitHub Pages: [https://ManuelBv.github.io/simple-groq-cli/](https://ManuelBv.github.io/simple-groq-cli/)
+
+
 ---

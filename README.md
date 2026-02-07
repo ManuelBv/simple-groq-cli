@@ -40,6 +40,18 @@ The `npm link` command creates a symbolic link (a shortcut) from a global direct
 
 This means that when you type `groq` in your terminal, your system will find the symbolic link, which points to the compiled `dist/groq.js` file in this project, and execute it. This is how you can run the command from any folder on your system.
 
+## Web Version (Bring Your Own Key)
+
+A web-based version of this tool is available, allowing you to use Groq models directly from your browser without installing anything.
+
+**Features:**
+- **Bring Your Own Key (BYIK):** Your API key is stored locally in your browser (localStorage) and never sent to any intermediate server.
+- **Direct Connection:** Connects directly to Groq's API from your browser.
+- **Chat History:** Saves your conversations locally using your browser's database.
+- **Markdown Support:** Renders responses with proper formatting.
+
+**[👉 Click here to use the Web Version](https://ManuelBv.github.io/simple-groq-cli/)**
+
 ## Usage
 
 Before using the CLI, make sure you have your Groq API key set as an environment variable. The method for setting environment variables depends on your operating system and shell.
