@@ -4,10 +4,10 @@ import { Groq } from 'groq-sdk';
 const MODEL_PRESETS: { [key: string]: string } = {
   text: 'llama-3.3-70b-versatile',
   fast: 'llama-3.1-8b-instant',
-  heavy: 'llama3-70b-8192',
+  heavy: 'llama-3.3-70b-versatile',
   code: 'llama-3.3-70b-versatile',
-  mixtral: 'mixtral-8x7b-32768',
-  gemma: 'gemma-7b-it'
+  qwen: 'qwen/qwen3-32b',
+  llama4: 'meta-llama/llama-4-scout-17b-16e-instruct'
 };
 
 export async function runCli(
@@ -21,10 +21,10 @@ export async function runCli(
     logFn('Available presets:');
     logFn('  text    -> llama-3.3-70b-versatile');
     logFn('  fast    -> llama-3.1-8b-instant');
-    logFn('  heavy   -> llama3-70b-8192');
+    logFn('  heavy   -> llama-3.3-70b-versatile');
     logFn('  code    -> llama-3.3-70b-versatile');
-    logFn('  mixtral -> mixtral-8x7b-32768');
-    logFn('  gemma   -> gemma-7b-it');
+    logFn('  qwen    -> qwen/qwen3-32b');
+    logFn('  llama4  -> meta-llama/llama-4-scout-17b-16e-instruct');
     exitFn(0);
   }
 

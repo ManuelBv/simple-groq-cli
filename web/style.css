@@ -336,7 +336,9 @@ body {
     }
 
     .history-list {
-        display: none; /* Hide history by default on mobile to save space, maybe toggle later */
+        display: block;
+        max-height: 120px;
+        overflow-y: auto;
     }
     
     /* Show history only when needed - simpler for now just to make it usable */

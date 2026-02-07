@@ -109,11 +109,11 @@ npm test
 
 ### Presets
 
-| Preset    | Model                     |
-| --------- | ------------------------- |
-| `text`    | `llama-3.3-70b-versatile` |
-| `fast`    | `llama-3.1-8b-instant`    |
-| `heavy`   | `llama3-70b-8192`         |
-| `code`    | `llama-3.3-70b-versatile` |
-| `mixtral` | `mixtral-8x7b-32768`      |
-| `gemma`   | `gemma-7b-it`             |
+| Preset   | Model                                       |
+| -------- | ------------------------------------------- |
+| `text`   | `llama-3.3-70b-versatile`                   |
+| `fast`   | `llama-3.1-8b-instant`                      |
+| `heavy`  | `llama-3.3-70b-versatile`                   |
+| `code`   | `llama-3.3-70b-versatile`                   |
+| `qwen`   | `qwen/qwen3-32b`                            |
+| `llama4` | `meta-llama/llama-4-scout-17b-16e-instruct` |
