@@ -167,6 +167,20 @@ body {
     cursor: pointer;
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#model-select {
+    padding: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    max-width: 150px;
+}
+
 .messages-container {
     flex: 1;
     overflow-y: auto;

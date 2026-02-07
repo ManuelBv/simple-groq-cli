@@ -40,6 +40,7 @@ const messageInput = document.getElementById('message-input') as HTMLTextAreaEle
 const sendBtn = document.getElementById('send-btn') as HTMLButtonElement;
 const currentChatTitle = document.getElementById('current-chat-title') as HTMLHeadingElement;
 const downloadBtn = document.getElementById('download-chat-btn') as HTMLButtonElement;
+const modelSelect = document.getElementById('model-select') as HTMLSelectElement;
 
 // --- Debug Elements ---
 const debugLog = document.getElementById('debug-log') as HTMLDivElement;
@@ -249,7 +250,7 @@ async function callGroqAPI(messages: Message[]): Promise<Response> {
         },
         body: JSON.stringify({
             messages: messages,
-            model: MODEL,
+            model: modelSelect.value,
             stream: true // Enable streaming
         })
     });
