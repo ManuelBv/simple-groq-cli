@@ -83,12 +83,14 @@ body {
     flex-direction: column;
     flex-shrink: 0;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .sidebar.collapsed {
     transform: translateX(-100%);
     width: 0;
     min-width: 0;
+    overflow: hidden;
 }
 
 /* Sidebar Overlay (for mobile) */
