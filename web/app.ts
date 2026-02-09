@@ -296,8 +296,14 @@ async function updateChat(id: string, messages: Message[], title?: string) {
 async function callGroqAPI(messages: Message[]): Promise<Response> {
     if (!apiKey) throw new Error("No API Key");
 
+    // Strip timestamp and model fields - API only accepts role and content
+    const apiMessages = messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+    }));
+
     const payload = {
-        messages: messages,
+        messages: apiMessages,
         model: modelSelect.value,
         stream: true
     };
@@ -333,6 +339,14 @@ clearKeyBtn.onclick = () => {
 };
 
 newChatBtn.onclick = createNewChat;
+
+// Ctrl+Enter to send message
+messageInput.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        sendBtn.click();
+    }
+});
 
 sendBtn.onclick = async () => {
     const content = messageInput.value.trim();
