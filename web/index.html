@@ -18,7 +18,7 @@
     </div>
 
     <div class="app-container">
-        <aside class="sidebar">
+        <aside id="sidebar" class="sidebar">
             <div class="sidebar-header">
                 <h3>History</h3>
                 <button id="new-chat-btn">+</button>
@@ -27,12 +27,23 @@
                 <!-- History items will go here -->
             </div>
             <div class="sidebar-footer">
-                <button id="clear-key-btn" class="small-btn">Clear API Key</button>
+                <button id="settings-toggle-btn" class="footer-btn">⚙️ Settings</button>
+                <div id="settings-panel" class="settings-panel collapsed">
+                    <div class="settings-item">
+                        <label>API Key:</label>
+                        <div class="key-display">
+                            <code id="api-key-display">••••••••••••</code>
+                            <button id="toggle-key-visibility-btn" class="small-icon-btn">👁️</button>
+                        </div>
+                    </div>
+                    <button id="clear-key-btn" class="danger-btn">Clear API Key</button>
+                </div>
             </div>
         </aside>
 
         <main class="chat-area">
             <header class="chat-header">
+                <button id="sidebar-toggle-btn" class="icon-btn" aria-label="Toggle History">☰</button>
                 <h2 id="current-chat-title">New Chat</h2>
                 <div class="header-controls">
                     <select id="model-select">

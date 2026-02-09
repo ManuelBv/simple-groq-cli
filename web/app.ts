@@ -5,6 +5,8 @@ import DOMPurify from 'dompurify';
 interface Message {
     role: 'system' | 'user' | 'assistant';
     content: string;
+    timestamp: number;
+    model?: string;
 }
 
 interface Conversation {
@@ -16,7 +18,7 @@ interface Conversation {
 
 // --- Constants ---
 const DB_NAME = 'GroqChatDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 const STORE_NAME = 'conversations';
 const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 const MODEL = 'llama-3.3-70b-versatile'; // Default model
@@ -25,6 +27,7 @@ const MODEL = 'llama-3.3-70b-versatile'; // Default model
 let db: IDBDatabase;
 let currentChatId: string | null = null;
 let apiKey: string | null = localStorage.getItem('groq_api_key') ? localStorage.getItem('groq_api_key')!.trim() : null;
+let sidebarOpen: boolean = localStorage.getItem('sidebar_open') === 'true';
 
 // --- DOM Elements ---
 const modal = document.getElementById('api-key-modal') as HTMLDivElement;
@@ -32,6 +35,13 @@ const apiKeyInput = document.getElementById('api-key-input') as HTMLInputElement
 const saveKeyBtn = document.getElementById('save-api-key-btn') as HTMLButtonElement;
 const apiKeyError = document.getElementById('api-key-error') as HTMLParagraphElement;
 const clearKeyBtn = document.getElementById('clear-key-btn') as HTMLButtonElement;
+
+const sidebar = document.getElementById('sidebar') as HTMLElement;
+const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn') as HTMLButtonElement;
+const settingsToggleBtn = document.getElementById('settings-toggle-btn') as HTMLButtonElement;
+const settingsPanel = document.getElementById('settings-panel') as HTMLDivElement;
+const apiKeyDisplay = document.getElementById('api-key-display') as HTMLElement;
+const toggleKeyVisibilityBtn = document.getElementById('toggle-key-visibility-btn') as HTMLButtonElement;
 
 const chatHistoryList = document.getElementById('chat-history-list') as HTMLDivElement;
 const newChatBtn = document.getElementById('new-chat-btn') as HTMLButtonElement;
@@ -108,9 +118,31 @@ function initDB(): Promise<void> {
 
         request.onupgradeneeded = (event) => {
             const db = (event.target as IDBOpenDBRequest).result;
+            const oldVersion = event.oldVersion;
+
             if (!db.objectStoreNames.contains(STORE_NAME)) {
                 const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
                 store.createIndex('updatedAt', 'updatedAt', { unique: false });
+            }
+
+            // Migration from v1 to v2: Add timestamps and model info
+            if (oldVersion < 2) {
+                const transaction = (event.target as IDBOpenDBRequest).transaction!;
+                const store = transaction.objectStore(STORE_NAME);
+                const getAllRequest = store.getAll();
+
+                getAllRequest.onsuccess = () => {
+                    const conversations = getAllRequest.result as Conversation[];
+                    conversations.forEach(conv => {
+                        const migratedMessages = conv.messages.map(msg => ({
+                            ...msg,
+                            timestamp: msg.timestamp || conv.updatedAt,
+                            model: msg.role === 'assistant' && !msg.model ? MODEL : msg.model
+                        }));
+                        conv.messages = migratedMessages;
+                        store.put(conv);
+                    });
+                };
             }
         };
     });
@@ -193,14 +225,36 @@ async function renderHistory() {
 function renderMessage(msg: Message) {
     const div = document.createElement('div');
     div.className = `message ${msg.role}`;
-    
+
+    // Add timestamp
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'message-timestamp';
+    const date = new Date(msg.timestamp);
+    const formatted = date.toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+    }) + ' ' + date.toLocaleTimeString('en-GB', {
+        hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    timestampDiv.textContent = formatted;
+    div.appendChild(timestampDiv);
+
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
-    
+
+    // Parse <think> tags for assistant messages
+    let processedContent = msg.content;
+    if (msg.role === 'assistant') {
+        const thinkingRegex = /<think>([\s\S]*?)<\/think>/gi;
+        processedContent = msg.content.replace(
+            thinkingRegex,
+            '<div class="ai-thinking"><em>AI is thinking: $1</em></div>'
+        );
+    }
+
     // Parse Markdown and Sanitize
-    const rawHtml = marked.parse(msg.content) as string;
+    const rawHtml = marked.parse(processedContent) as string;
     const cleanHtml = DOMPurify.sanitize(rawHtml);
-    
+
     contentDiv.innerHTML = cleanHtml;
     div.appendChild(contentDiv);
     messagesContainer.appendChild(div);
@@ -285,19 +339,44 @@ sendBtn.onclick = async () => {
     if (!content || !currentChatId) return;
 
     messageInput.value = '';
-    
+
     // User Message
-    const userMsg: Message = { role: 'user', content };
+    const userMsg: Message = {
+        role: 'user',
+        content,
+        timestamp: Date.now()
+    };
     renderMessage(userMsg);
-    
+
     const chat = await getConversation(currentChatId);
     const updatedMessages = [...chat.messages, userMsg];
     await updateChat(currentChatId, updatedMessages); // Save user message
 
+    // Capture model before API call
+    const selectedModel = modelSelect.value;
+
     // Assistant Placeholder
-    const assistantMsg: Message = { role: 'assistant', content: '' };
+    const assistantMsg: Message = {
+        role: 'assistant',
+        content: '',
+        timestamp: Date.now(),
+        model: selectedModel
+    };
     const msgDiv = document.createElement('div');
     msgDiv.className = 'message assistant';
+
+    // Add timestamp
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'message-timestamp';
+    const date = new Date(assistantMsg.timestamp);
+    const formatted = date.toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+    }) + ' ' + date.toLocaleTimeString('en-GB', {
+        hour: '2-digit', minute: '2-digit', hour12: false
+    });
+    timestampDiv.textContent = formatted;
+    msgDiv.appendChild(timestampDiv);
+
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     msgDiv.appendChild(contentDiv);
@@ -343,9 +422,16 @@ sendBtn.onclick = async () => {
                             const data = JSON.parse(line.slice(6));
                             const delta = data.choices[0]?.delta?.content || '';
                             fullResponse += delta;
-                            
+
+                            // Parse <think> tags
+                            const thinkingRegex = /<think>([\s\S]*?)<\/think>/gi;
+                            const processedResponse = fullResponse.replace(
+                                thinkingRegex,
+                                '<div class="ai-thinking"><em>AI is thinking: $1</em></div>'
+                            );
+
                             // Real-time render (sanitized)
-                            contentDiv.innerHTML = DOMPurify.sanitize(marked.parse(fullResponse) as string);
+                            contentDiv.innerHTML = DOMPurify.sanitize(marked.parse(processedResponse) as string);
                             messagesContainer.scrollTop = messagesContainer.scrollHeight;
                         } catch (e) {
                             console.error('Error parsing chunk', e);
@@ -372,9 +458,25 @@ downloadBtn.onclick = async () => {
     if (!currentChatId) return;
     const chat = await getConversation(currentChatId);
     let mdContent = `# ${chat.title}\n\n`;
-    
+
     chat.messages.forEach(msg => {
-        mdContent += `**${msg.role.toUpperCase()}:**\n${msg.content}\n\n---\n\n`;
+        // Format timestamp with GMT offset
+        const date = new Date(msg.timestamp);
+        const formatted = date.toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+        }) + ' ' + date.toLocaleTimeString('en-GB', {
+            hour: '2-digit', minute: '2-digit', hour12: false
+        });
+        const offset = date.toTimeString().match(/GMT([+-]\d+)/)?.[1] || '';
+
+        // Build header
+        let header = `**${msg.role.toUpperCase()}** (${formatted} GMT${offset})`;
+        if (msg.role === 'assistant' && msg.model) {
+            header += ` [${msg.model}]`;
+        }
+        header += ':\n';
+
+        mdContent += header + msg.content + '\n\n---\n\n';
     });
 
     const blob = new Blob([mdContent], { type: 'text/markdown' });
@@ -386,12 +488,75 @@ downloadBtn.onclick = async () => {
     URL.revokeObjectURL(url);
 };
 
+// Sidebar toggle
+sidebarToggleBtn.onclick = () => {
+    sidebarOpen = !sidebarOpen;
+    if (sidebarOpen) {
+        sidebar.classList.remove('collapsed');
+        sidebarToggleBtn.textContent = '✕';
+    } else {
+        sidebar.classList.add('collapsed');
+        sidebarToggleBtn.textContent = '☰';
+    }
+    localStorage.setItem('sidebar_open', sidebarOpen.toString());
+};
+
+// Settings panel toggle
+let settingsOpen = false;
+settingsToggleBtn.onclick = () => {
+    settingsOpen = !settingsOpen;
+    if (settingsOpen) {
+        settingsPanel.classList.remove('collapsed');
+    } else {
+        settingsPanel.classList.add('collapsed');
+    }
+};
+
+// API key visibility toggle
+let keyVisible = false;
+toggleKeyVisibilityBtn.onclick = () => {
+    keyVisible = !keyVisible;
+    if (keyVisible && apiKey) {
+        apiKeyDisplay.textContent = apiKey;
+        toggleKeyVisibilityBtn.textContent = '🙈';
+    } else if (apiKey) {
+        const masked = apiKey.length > 8
+            ? `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`
+            : '••••••••••••';
+        apiKeyDisplay.textContent = masked;
+        toggleKeyVisibilityBtn.textContent = '👁️';
+    }
+};
+
+// Update API key display
+function updateApiKeyDisplay() {
+    if (apiKey) {
+        const masked = apiKey.length > 8
+            ? `${apiKey.substring(0, 4)}...${apiKey.substring(apiKey.length - 4)}`
+            : '••••••••••••';
+        apiKeyDisplay.textContent = masked;
+    } else {
+        apiKeyDisplay.textContent = 'No key set';
+    }
+}
+
 // --- Boot ---
 (async () => {
     await initDB();
     checkApiKey();
     await renderHistory();
-    
+
+    // Initialize sidebar state
+    if (!sidebarOpen) {
+        sidebar.classList.add('collapsed');
+        sidebarToggleBtn.textContent = '☰';
+    } else {
+        sidebarToggleBtn.textContent = '✕';
+    }
+
+    // Initialize API key display
+    updateApiKeyDisplay();
+
     const chats = await getAllConversations();
     if (chats.length > 0) {
         loadChat(chats[0].id);
