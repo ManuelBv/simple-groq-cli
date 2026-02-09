@@ -1,17 +1,45 @@
 # Claude CLI Context: Simple Groq CLI
 
-This repository contains a simple command-line interface (CLI) tool designed to interact with the Groq API. It is built using Node.js, TypeScript, and the `groq-sdk`.
+This repository contains a simple command-line interface (CLI) tool and web interface designed to interact with the Groq API. It is built using Node.js, TypeScript, and the `groq-sdk`.
 
 ## Purpose
 
-The primary purpose of this CLI is to provide an easy way for users to leverage Groq's powerful language models directly from their terminal. You can use it to:
-- Generate text based on prompts.
-- Ask questions and receive AI-generated answers.
-- Experiment with different Groq models.
+The primary purpose of this project is to provide easy ways for users to leverage Groq's powerful language models:
+
+### CLI Tool
+- Generate text based on prompts from your terminal
+- Ask questions and receive AI-generated answers
+- Experiment with different Groq models via command-line
+
+### Web Interface (GitHub Pages)
+- **Live at**: https://ManuelBv.github.io/simple-groq-cli/
+- Bring Your Own Key (BYOK) - API key stored locally in browser
+- Full conversation history with IndexedDB storage
+- Collapsible sidebar with chat history (default: closed)
+- Settings panel for API key management
+- Message timestamps (24-hour format)
+- Support for `<think>` tag parsing from Groq API
+- Model switching mid-conversation with tracking
+- Enhanced markdown export (timestamps, GMT offset, model info)
+- Keyboard shortcuts (Ctrl+Enter to send)
+- Responsive mobile design (sidebar overlay)
+- GitHub repo link in sidebar
+
+## Recent Updates (Feb 2026)
+
+### Web UI v2 Enhancements
+- **Database Schema v2**: Messages now store timestamps and model info
+- **Collapsible Sidebar**: Hamburger menu (☰/✕) with smooth transitions
+- **Settings Panel**: API key display with show/hide toggle
+- **Message Timestamps**: All messages show when they were sent
+- **Think Tag Styling**: `<think>` blocks from Groq API are visually distinct
+- **Enhanced Export**: Markdown downloads include timestamps and model names
+- **Keyboard Shortcuts**: Ctrl+Enter to send messages
+- **Mobile Optimized**: Sidebar overlays on mobile devices
 
 ## Expectations
 
-This tool is intended to be a straightforward utility for quick API interactions. It is configured to work with your Groq API key, which needs to be set as an environment variable. For detailed setup instructions, please refer to the main `README.md` file.## Core Behavioral Rules (All Contexts)
+This tool is intended to be a straightforward utility for quick API interactions. The CLI is configured to work with your Groq API key as an environment variable. The web interface stores your API key locally in the browser. For detailed setup instructions, please refer to the main `README.md` file.## Core Behavioral Rules (All Contexts)
 
 ### Intellectual Honesty
 - Disagree when facts contradict my statements; prioritize truth over agreement

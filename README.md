@@ -44,11 +44,22 @@ This means that when you type `groq` in your terminal, your system will find the
 
 A web-based version of this tool is available, allowing you to use Groq models directly from your browser without installing anything.
 
-**Features:**
-- **Bring Your Own Key (BYIK):** Your API key is stored locally in your browser (localStorage) and never sent to any intermediate server.
-- **Direct Connection:** Connects directly to Groq's API from your browser.
-- **Chat History:** Saves your conversations locally using your browser's database.
-- **Markdown Support:** Renders responses with proper formatting.
+**Core Features:**
+- **Bring Your Own Key (BYOK):** Your API key is stored locally in your browser and never sent to any intermediate server
+- **Direct Connection:** Connects directly to Groq's API from your browser
+- **Chat History:** Saves conversations locally using IndexedDB
+- **Markdown Support:** Renders responses with proper formatting, code blocks, and syntax highlighting
+- **Model Selection:** Switch between multiple Groq models (Llama 3.3, 3.1, Qwen 3, Llama 4)
+
+**UI Enhancements:**
+- **Collapsible Sidebar:** History panel with hamburger menu (default: closed)
+- **Settings Panel:** Manage your API key with show/hide toggle
+- **Message Timestamps:** All messages display when they were sent (24-hour format)
+- **Think Tag Support:** Special styling for `<think>` reasoning blocks from Groq API
+- **Enhanced Export:** Download conversations as markdown with timestamps and model info
+- **Keyboard Shortcuts:** Ctrl+Enter to send messages, Enter for new lines
+- **Mobile Responsive:** Sidebar overlay design optimized for mobile devices
+- **Debug Console:** Built-in error logging for troubleshooting API issues
 
 **[👉 Click here to use the Web Version](https://ManuelBv.github.io/simple-groq-cli/)**
 
