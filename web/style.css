@@ -82,11 +82,32 @@ body {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
 .sidebar.collapsed {
     transform: translateX(-100%);
+    width: 0;
+    min-width: 0;
+}
+
+/* Sidebar Overlay (for mobile) */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.sidebar-overlay.visible {
+    display: block;
+    opacity: 1;
 }
 
 .sidebar-header {
@@ -462,12 +483,13 @@ body {
         top: 0;
         left: 0;
         height: 100%;
-        width: 260px;
+        width: 260px !important;
         z-index: 100;
     }
 
     .sidebar.collapsed {
         transform: translateX(-100%);
+        width: 260px !important;
     }
 
     .chat-area {

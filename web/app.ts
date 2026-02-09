@@ -37,6 +37,7 @@ const apiKeyError = document.getElementById('api-key-error') as HTMLParagraphEle
 const clearKeyBtn = document.getElementById('clear-key-btn') as HTMLButtonElement;
 
 const sidebar = document.getElementById('sidebar') as HTMLElement;
+const sidebarOverlay = document.getElementById('sidebar-overlay') as HTMLDivElement;
 const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn') as HTMLButtonElement;
 const settingsToggleBtn = document.getElementById('settings-toggle-btn') as HTMLButtonElement;
 const settingsPanel = document.getElementById('settings-panel') as HTMLDivElement;
@@ -503,16 +504,27 @@ downloadBtn.onclick = async () => {
 };
 
 // Sidebar toggle
-sidebarToggleBtn.onclick = () => {
+function toggleSidebar() {
     sidebarOpen = !sidebarOpen;
     if (sidebarOpen) {
         sidebar.classList.remove('collapsed');
+        sidebarOverlay.classList.add('visible');
         sidebarToggleBtn.textContent = '✕';
     } else {
         sidebar.classList.add('collapsed');
+        sidebarOverlay.classList.remove('visible');
         sidebarToggleBtn.textContent = '☰';
     }
     localStorage.setItem('sidebar_open', sidebarOpen.toString());
+}
+
+sidebarToggleBtn.onclick = toggleSidebar;
+
+// Close sidebar when clicking overlay (mobile)
+sidebarOverlay.onclick = () => {
+    if (sidebarOpen) {
+        toggleSidebar();
+    }
 };
 
 // Settings panel toggle
@@ -563,8 +575,11 @@ function updateApiKeyDisplay() {
     // Initialize sidebar state
     if (!sidebarOpen) {
         sidebar.classList.add('collapsed');
+        sidebarOverlay.classList.remove('visible');
         sidebarToggleBtn.textContent = '☰';
     } else {
+        sidebar.classList.remove('collapsed');
+        sidebarOverlay.classList.add('visible');
         sidebarToggleBtn.textContent = '✕';
     }
 
