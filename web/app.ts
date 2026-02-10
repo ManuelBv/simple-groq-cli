@@ -336,9 +336,12 @@ saveKeyBtn.onclick = () => {
 };
 
 clearKeyBtn.onclick = () => {
-    localStorage.removeItem('groq_api_key');
-    apiKey = null;
-    location.reload();
+    const confirmed = confirm('Are you sure you want to clear your API key? You will need to enter it again to use the chat.');
+    if (confirmed) {
+        localStorage.removeItem('groq_api_key');
+        apiKey = null;
+        location.reload();
+    }
 };
 
 newChatBtn.onclick = createNewChat;

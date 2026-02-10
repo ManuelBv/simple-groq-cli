@@ -282,14 +282,16 @@ body {
 }
 
 .danger-btn {
-    width: 100%;
+    width: auto;
+    min-width: 120px;
     background: transparent;
     border: 1px solid #e74c3c;
     color: #e74c3c;
-    padding: 8px;
+    padding: 8px 12px;
     border-radius: 4px;
     font-size: 0.8rem;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .danger-btn:hover {
