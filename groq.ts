@@ -1,14 +1,6 @@
 #!/usr/bin/env node
 import { Groq } from 'groq-sdk';
-
-const MODEL_PRESETS: { [key: string]: string } = {
-  text: 'llama-3.3-70b-versatile',
-  fast: 'llama-3.1-8b-instant',
-  heavy: 'llama-3.3-70b-versatile',
-  code: 'llama-3.3-70b-versatile',
-  qwen: 'qwen/qwen3-32b',
-  llama4: 'meta-llama/llama-4-scout-17b-16e-instruct'
-};
+import { MODEL_PRESETS } from './models';
 
 export async function runCli(
   args: string[],
@@ -19,12 +11,10 @@ export async function runCli(
 ): Promise<void> {
   if (args[0] === '--list') {
     logFn('Available presets:');
-    logFn('  text    -> llama-3.3-70b-versatile');
-    logFn('  fast    -> llama-3.1-8b-instant');
-    logFn('  heavy   -> llama-3.3-70b-versatile');
-    logFn('  code    -> llama-3.3-70b-versatile');
-    logFn('  qwen    -> qwen/qwen3-32b');
-    logFn('  llama4  -> meta-llama/llama-4-scout-17b-16e-instruct');
+    Object.entries(MODEL_PRESETS).forEach(([preset, model]) => {
+      const padding = ' '.repeat(Math.max(1, 12 - preset.length));
+      logFn(`  ${preset}${padding}-> ${model}`);
+    });
     exitFn(0);
   }
 

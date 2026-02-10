@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import DOMPurify from 'dompurify';
+import { MODELS, DEFAULT_MODEL } from '../models';
 
 // --- Types ---
 interface Message {
@@ -21,7 +22,6 @@ const DB_NAME = 'GroqChatDB';
 const DB_VERSION = 2;
 const STORE_NAME = 'conversations';
 const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const MODEL = 'llama-3.3-70b-versatile'; // Default model
 
 // --- State ---
 let db: IDBDatabase;
@@ -140,7 +140,7 @@ function initDB(): Promise<void> {
                         const migratedMessages = conv.messages.map(msg => ({
                             ...msg,
                             timestamp: msg.timestamp || conv.updatedAt,
-                            model: msg.role === 'assistant' && !msg.model ? MODEL : msg.model
+                            model: msg.role === 'assistant' && !msg.model ? DEFAULT_MODEL : msg.model
                         }));
                         conv.messages = migratedMessages;
                         store.put(conv);
@@ -598,10 +598,26 @@ function updateApiKeyDisplay() {
     }
 }
 
+// --- Populate Model Select ---
+function populateModelSelect() {
+    modelSelect.innerHTML = '';
+    MODELS.forEach(model => {
+        const option = document.createElement('option');
+        option.value = model.id;
+        option.textContent = model.description
+            ? `${model.name} (${model.description})`
+            : model.name;
+        modelSelect.appendChild(option);
+    });
+    // Set default selected model
+    modelSelect.value = DEFAULT_MODEL;
+}
+
 // --- Boot ---
 (async () => {
     await initDB();
     checkApiKey();
+    populateModelSelect();
     await renderHistory();
 
     // Initialize sidebar state

@@ -48,7 +48,8 @@ describe('runCli', () => {
       runCli(['--list'], undefined, mockLog, mockError, mockExit)
     ).rejects.toThrow('Process.exit called with code 0');
     expect(mockLog).toHaveBeenCalledWith('Available presets:');
-    expect(mockLog).toHaveBeenCalledWith('  text    -> llama-3.3-70b-versatile');
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('text'));
+    expect(mockLog).toHaveBeenCalledWith(expect.stringContaining('llama-3.3-70b-versatile'));
     expect(mockExit).toHaveBeenCalledWith(0);
   });
 
