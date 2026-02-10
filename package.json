@@ -11,7 +11,11 @@
     "dev:web": "vite",
     "build:web": "vite build",
     "build:web:legacy": "mkdir -p docs && cp web/index.html web/style.css docs/ && esbuild web/app.ts --bundle --outfile=docs/bundle.js --format=esm --target=es2020",
-    "test": "jest --config jest.config.ts"
+    "test": "jest --config jest.config.ts",
+    "test:web": "jest --config jest.config.web.ts",
+    "test:all": "npm run test && npm run test:web",
+    "test:watch": "jest --config jest.config.web.ts --watch",
+    "test:coverage": "jest --config jest.config.web.ts --coverage"
   },
   "keywords": [
     "groq",
@@ -26,12 +30,17 @@
     "marked": "^17.0.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@types/dompurify": "^3.0.5",
     "@types/jest": "^30.0.0",
+    "@types/jsdom": "^27.0.0",
     "@types/marked": "^5.0.2",
     "@types/node": "^25.1.0",
     "esbuild": "^0.27.2",
     "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.0.0",
+    "jsdom": "^28.0.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
