@@ -1,130 +1,279 @@
 # Simple Groq CLI
 
-A simple command-line interface for the Groq API.
+A simple command-line interface and web application for interacting with the Groq API.
 
-## Installation
+## 📋 Project Overview
 
-To make the `groq` command work from any folder, you need to globally link this repository. Here are the steps:
+This project provides two ways to interact with Groq's powerful language models:
 
-1.  **Clone the repository (if you haven't already):**
-    If you are moving this project to a new machine, you will need to clone it first.
+1. **CLI Tool** - Command-line interface for terminal use
+2. **Web Interface** - Browser-based chat UI (no installation required)
 
-2.  **Navigate to the project directory:**
+Both tools allow you to:
+- Use multiple Groq models (Llama 3.3, 3.1, Qwen 3, Llama 4)
+- Generate AI responses from prompts
+- Bring Your Own API Key (BYOK)
+- Work with streaming responses
 
-    ```bash
-    cd simple-groq-cli
-    ```
+**Technology Stack:**
+- TypeScript
+- Node.js
+- Groq SDK
+- Vite (Web UI)
+- Jest (Testing)
 
-3.  **Install dependencies:**
+---
 
-    ```bash
-    npm install
-    ```
+## 🖥️ CLI Tool
 
-4.  **Build the TypeScript code:**
+### Installation
 
-    ```bash
-    npm run build
-    ```
+To make the `groq` command work from any folder:
 
-    This command compiles the TypeScript files (`.ts`) into JavaScript files (`.js`) in the `dist` directory.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ManuelBv/simple-groq-cli.git
+   cd simple-groq-cli
+   ```
 
-5.  **Link the package globally:**
-    ```bash
-    npm link
-    ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-### How `npm link` works
+3. **Build the TypeScript code:**
+   ```bash
+   npm run build
+   ```
 
-The `npm link` command creates a symbolic link (a shortcut) from a global directory that is part of your system's `PATH` to the local project directory where you ran the command.
+4. **Link the package globally:**
+   ```bash
+   npm link
+   ```
 
-This means that when you type `groq` in your terminal, your system will find the symbolic link, which points to the compiled `dist/groq.js` file in this project, and execute it. This is how you can run the command from any folder on your system.
+#### How `npm link` works
 
-## Web Version (Bring Your Own Key)
-
-A web-based version of this tool is available, allowing you to use Groq models directly from your browser without installing anything.
-
-**Core Features:**
-- **Bring Your Own Key (BYOK):** Your API key is stored locally in your browser and never sent to any intermediate server
-- **Direct Connection:** Connects directly to Groq's API from your browser
-- **Chat History:** Saves conversations locally using IndexedDB
-- **Markdown Support:** Renders responses with proper formatting, code blocks, and syntax highlighting
-- **Model Selection:** Switch between multiple Groq models (Llama 3.3, 3.1, Qwen 3, Llama 4)
-
-**UI Enhancements:**
-- **Collapsible Sidebar:** History panel with hamburger menu (default: closed)
-- **Settings Panel:** Manage your API key with show/hide toggle
-- **Message Timestamps:** All messages display when they were sent (24-hour format)
-- **Think Tag Support:** Special styling for `<think>` reasoning blocks from Groq API
-- **Enhanced Export:** Download conversations as markdown with timestamps and model info
-- **Keyboard Shortcuts:** Ctrl+Enter to send messages, Enter for new lines
-- **Mobile Responsive:** Sidebar overlay design optimized for mobile devices
-- **Debug Console:** Built-in error logging for troubleshooting API issues
-
-**[👉 Click here to use the Web Version](https://ManuelBv.github.io/simple-groq-cli/)**
-
-## Usage
-
-Before using the CLI, make sure you have your Groq API key set as an environment variable. The method for setting environment variables depends on your operating system and shell.
+The `npm link` command creates a symbolic link from a global directory in your system's `PATH` to the local project directory. When you type `groq` in your terminal, your system finds the symbolic link pointing to `dist/groq.js` and executes it.
 
 ### Environment Setup
 
-**For Linux/macOS (Bash/Zsh):**
+Set your Groq API key as an environment variable:
 
+**Linux/macOS (Bash/Zsh):**
 ```bash
 export GROQ_API_KEY="your_api_key_here"
 ```
 
-_(Note: For persistent storage, add this line to your shell's profile file, e.g., `~/.bashrc`, `~/.zshrc`, or `~/.profile`.)_
+For persistent storage, add this line to `~/.bashrc`, `~/.zshrc`, or `~/.profile`.
 
-**For Windows PowerShell:**
-
+**Windows PowerShell:**
 ```powershell
 $env:GROQ_API_KEY="your_api_key_here"
 ```
 
-_(Note: This command sets the variable for the current session only. To make it permanent, add this line to your PowerShell profile script by running `notepad $PROFILE` and saving the file.)_
+For permanent storage, add to your PowerShell profile: `notepad $PROFILE`
 
-**Important:** Replace `"your_api_key_here"` with your actual Groq API key.
+### Usage
 
-Then, you can use the `groq` command as follows:
+**Run a prompt:**
+```bash
+groq <preset|model> "Your prompt"
+```
 
-- **To run a prompt:**
+Example:
+```bash
+groq fast "Write a short poem about AI."
+```
 
-  ```bash
-  groq <preset|model> "Your prompt"
-  ```
+**List available presets:**
+```bash
+groq --list
+```
 
-  For example: `groq fast "Write a short poem about AI."`
+### Available Presets
 
-- **To list available model presets:**
-  ```bash
-  groq --list
-  ```
+| Preset | Model | Description |
+|--------|-------|-------------|
+| `text` | `llama-3.3-70b-versatile` | General purpose |
+| `fast` | `llama-3.1-8b-instant` | Quick responses |
+| `heavy` | `llama-3.3-70b-versatile` | Complex tasks |
+| `code` | `llama-3.3-70b-versatile` | Code generation |
+| `qwen` | `qwen/qwen3-32b` | Qwen model |
+| `llama4scout` | `meta-llama/llama-4-scout-17b-16e-instruct` | Llama 4 Scout |
+| `llama4maverick` | `meta-llama/llama-4-maverick-17b-128e-instruct` | Llama 4 Maverick |
 
-### Running from source (development)
+You can also use any Groq model ID directly instead of presets.
 
-During development, you might want to run the TypeScript code directly without building it first. You can do this using `ts-node`:
+---
+
+## 🌐 Web Interface
+
+**[👉 Click here to use the Web Version](https://ManuelBv.github.io/simple-groq-cli/)**
+
+### Features
+
+**Core Functionality:**
+- ✅ **Bring Your Own Key (BYOK)** - API key stored locally in browser (localStorage)
+- ✅ **Direct Connection** - Connects directly to Groq's API (no proxy servers)
+- ✅ **Chat History** - Conversations saved locally using IndexedDB
+- ✅ **Markdown Support** - Renders responses with code blocks and syntax highlighting
+- ✅ **Model Selection** - Switch between multiple Groq models mid-conversation
+- ✅ **Message Timestamps** - All messages display send time (24-hour format)
+
+**User Interface:**
+- ✅ **Collapsible Sidebar** - History panel with hamburger menu (☰)
+- ✅ **Settings Panel** - Manage API key with show/hide toggle
+- ✅ **API Info Panel** - Instructions to get your Groq API key
+- ✅ **Think Tag Support** - Special styling for `<think>` reasoning blocks
+- ✅ **Enhanced Export** - Download conversations as markdown with timestamps and model info
+- ✅ **Keyboard Shortcuts** - Ctrl+Enter to send, Enter for new lines
+- ✅ **Mobile Responsive** - Optimized sidebar overlay for mobile devices
+- ✅ **Debug Console** - Built-in error logging for troubleshooting
+
+**Security:**
+- 🔒 API key stored locally (never sent to intermediate servers)
+- 🔒 Direct API communication with Groq
+- 🔒 No data collection or tracking
+- 🔒 Clear API key with confirmation dialog
+
+### Getting Your API Key
+
+1. Visit [groq.com](https://groq.com/)
+2. Sign up for a free account
+3. Navigate to [API Keys](https://console.groq.com/keys)
+4. Create a new API key
+5. Copy and paste into the web interface
+
+---
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+simple-groq-cli/
+├── groq.ts              # CLI source code
+├── groq.test.ts         # CLI tests
+├── models.ts            # Shared model configuration
+├── web/                 # Web UI source code
+│   ├── app.ts          # Main application logic
+│   ├── app.test.ts     # Web UI tests
+│   ├── index.html      # HTML structure
+│   ├── style.css       # Styling
+│   └── test-setup.ts   # Test configuration
+├── docs/               # Built web UI (GitHub Pages)
+├── dist/               # Compiled CLI code
+└── TESTING.md          # Testing documentation
+```
+
+### Building
+
+**Build CLI:**
+```bash
+npm run build
+```
+
+**Build Web UI:**
+```bash
+npm run build:web
+```
+
+**Development Server (Web UI):**
+```bash
+npm run dev:web
+```
+
+### Testing
+
+**Run all tests (56 tests total):**
+```bash
+npm run test:all
+```
+
+**Run CLI tests only (6 tests):**
+```bash
+npm test
+```
+
+**Run Web UI tests only (50 tests):**
+```bash
+npm run test:web
+```
+
+**Watch mode (for development):**
+```bash
+npm run test:watch
+```
+
+**Coverage report:**
+```bash
+npm run test:coverage
+```
+
+**Alternative test runners:**
+```bash
+./run-tests.sh        # Standard helper script
+./test-directly.sh    # Bypasses npm (for permission issues)
+```
+
+See [TESTING.md](TESTING.md) for detailed testing documentation.
+
+### Running from Source
+
+During development, run TypeScript directly:
 
 ```bash
 ts-node groq.ts <preset|model> "Your prompt"
 ```
 
-### Running Tests
+### Adding New Models
 
-To run the unit tests:
+All models are configured in `models.ts`. To add a new model:
+
+1. Add to the `MODELS` array
+2. Optionally add a CLI preset in `MODEL_PRESETS`
+3. Rebuild: `npm run build && npm run build:web`
+
+Both CLI and Web UI will automatically use the new model.
+
+See [MODELS.md](MODELS.md) for model configuration details.
+
+### Documentation
+
+- **[TESTING.md](TESTING.md)** - Comprehensive testing guide
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Fix common test issues
+- **[MODELS.md](MODELS.md)** - Model configuration reference
+- **[CLAUDE.MD](CLAUDE.MD)** - Development workflow and requirements
+
+---
+
+## 📝 License
+
+ISC
+
+## 🤝 Contributing
+
+Contributions are welcome! Please ensure all tests pass before submitting:
 
 ```bash
-npm test
+npm run test:all
 ```
 
-### Presets
+---
 
-| Preset   | Model                                       |
-| -------- | ------------------------------------------- |
-| `text`   | `llama-3.3-70b-versatile`                   |
-| `fast`   | `llama-3.1-8b-instant`                      |
-| `heavy`  | `llama-3.3-70b-versatile`                   |
-| `code`   | `llama-3.3-70b-versatile`                   |
-| `qwen`   | `qwen/qwen3-32b`                            |
-| `llama4` | `meta-llama/llama-4-scout-17b-16e-instruct` |
+## 📦 NPM Scripts Reference
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Compile CLI TypeScript to JavaScript |
+| `npm run build:web` | Build Web UI for production |
+| `npm run dev:web` | Start Web UI development server |
+| `npm test` | Run CLI tests |
+| `npm run test:web` | Run Web UI tests |
+| `npm run test:all` | Run all tests (required before commit) |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run test:coverage` | Generate coverage report |
+
+---
+
+**Made with ❤️ using Groq's powerful language models**
