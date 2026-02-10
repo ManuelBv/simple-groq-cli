@@ -329,11 +329,27 @@ saveKeyBtn.onclick = () => {
     if (key.startsWith('gsk_')) {
         localStorage.setItem('groq_api_key', key);
         apiKey = key;
+        updateApiKeyDisplay();
+        apiKeyInput.value = '';
+        apiKeyError.style.display = 'none';
         hideModal();
     } else {
         apiKeyError.style.display = 'block';
     }
 };
+
+// Clear error message when user types
+apiKeyInput.addEventListener('input', () => {
+    apiKeyError.style.display = 'none';
+});
+
+// Allow Enter key to save API key
+apiKeyInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        saveKeyBtn.click();
+    }
+});
 
 clearKeyBtn.onclick = () => {
     const confirmed = confirm('Are you sure you want to clear your API key? You will need to enter it again to use the chat.');

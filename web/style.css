@@ -65,6 +65,22 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.modal-content button:hover {
+    background: #2980b9;
+}
+
+.modal-content .error-msg {
+    background: #fee;
+    border: 1px solid #e74c3c;
+    color: #c0392b;
+    padding: 10px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 0.9rem;
 }
 
 /* Layout */
