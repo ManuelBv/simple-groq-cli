@@ -37,6 +37,62 @@ The primary purpose of this project is to provide easy ways for users to leverag
 - **Keyboard Shortcuts**: Ctrl+Enter to send messages
 - **Mobile Optimized**: Sidebar overlays on mobile devices
 
+## Development Workflow
+
+### Testing Requirements (CRITICAL)
+
+**Before committing ANY changes to the repository:**
+
+1. **Run All Tests**
+   ```bash
+   npm run test:all
+   ```
+   This runs both CLI tests (6 tests) and Web UI tests (50 tests)
+
+2. **Verify All Tests Pass**
+   - CLI tests must pass: `groq.test.ts`
+   - Web UI tests must pass: `web/app.test.ts`
+   - Zero failures allowed before commit
+
+3. **Test Commands Available**
+   ```bash
+   npm test           # Run CLI tests only
+   npm run test:web   # Run Web UI tests only
+   npm run test:all   # Run ALL tests (required before commit)
+   npm run test:watch # Watch mode for development
+   npm run test:coverage # Generate coverage report
+   ```
+
+4. **Test Coverage**
+   - **Total:** 56 tests (6 CLI + 50 Web UI)
+   - **CLI:** API calls, presets, error handling
+   - **Web UI:** HTML structure, API key management, UI interactions, keyboard shortcuts
+
+5. **What Gets Tested**
+   - ✅ API key validation (gsk_ prefix requirement)
+   - ✅ LocalStorage operations
+   - ✅ Settings/API info panel toggles
+   - ✅ Sidebar collapse/expand
+   - ✅ Modal visibility
+   - ✅ Keyboard shortcuts (Enter, Ctrl+Enter)
+   - ✅ Error message display
+   - ✅ Chat title generation
+   - ✅ Model configuration from shared config
+   - ✅ Input validation and sanitization
+
+6. **If Tests Fail**
+   - ❌ DO NOT commit
+   - Fix the failing tests or code
+   - Re-run `npm run test:all`
+   - Only commit when all tests pass
+
+### Building
+
+```bash
+npm run build       # Build CLI TypeScript
+npm run build:web   # Build Web UI for production (docs/)
+```
+
 ## Expectations
 
 This tool is intended to be a straightforward utility for quick API interactions. The CLI is configured to work with your Groq API key as an environment variable. The web interface stores your API key locally in the browser. For detailed setup instructions, please refer to the main `README.md` file.## Core Behavioral Rules (All Contexts)
