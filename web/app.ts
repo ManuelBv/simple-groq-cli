@@ -39,6 +39,8 @@ const clearKeyBtn = document.getElementById('clear-key-btn') as HTMLButtonElemen
 const sidebar = document.getElementById('sidebar') as HTMLElement;
 const sidebarOverlay = document.getElementById('sidebar-overlay') as HTMLDivElement;
 const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn') as HTMLButtonElement;
+const apiInfoToggleBtn = document.getElementById('api-info-toggle-btn') as HTMLButtonElement;
+const apiInfoPanel = document.getElementById('api-info-panel') as HTMLDivElement;
 const settingsToggleBtn = document.getElementById('settings-toggle-btn') as HTMLButtonElement;
 const settingsPanel = document.getElementById('settings-panel') as HTMLDivElement;
 const apiKeyDisplay = document.getElementById('api-key-display') as HTMLElement;
@@ -524,6 +526,17 @@ sidebarToggleBtn.onclick = toggleSidebar;
 sidebarOverlay.onclick = () => {
     if (sidebarOpen) {
         toggleSidebar();
+    }
+};
+
+// API Info panel toggle
+let apiInfoOpen = false;
+apiInfoToggleBtn.onclick = () => {
+    apiInfoOpen = !apiInfoOpen;
+    if (apiInfoOpen) {
+        apiInfoPanel.classList.remove('collapsed');
+    } else {
+        apiInfoPanel.classList.add('collapsed');
     }
 };
 
